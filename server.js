@@ -2,9 +2,12 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
-// Configuración (¡CAMBIAR ESTO!)
+// Carga variables .env en desarrollo
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
+
+// Configuración
 const D_ID_API_KEY = process.env.D_ID_API_KEY;
-const AVATAR_IMAGE_URL = process.env.AVAR_IMAGE_URL;
+const AVATAR_IMAGE_URL = process.env.AVATAR_IMAGE_URL; // ¡Nombre corregido!
 
 app.use(express.json());
 
@@ -13,22 +16,19 @@ app.post('/generate-video', async (req, res) => {
     try {
         const { text } = req.body;
 
-        // Llama a D-ID con Basic Auth (¡cambio crítico!)
+        // Validación
+        if (!text || typeof text !== 'string') {
+            return res.status(400).json({ error: "El campo 'text' es requerido" });
+        }
+
+        // Llama a D-ID
         const response = await axios.post(
             'https://api.d-id.com/talks',
+            { script: text, source_url: AVATAR_IMAGE_URL },
             {
-                script: text,
-                source_url: AVATAR_IMAGE_URL
-            },
-            {
-                auth: {
-                    username: 'default', // Siempre es 'default'
-                    password: D_ID_API_KEY // Tu API Key real
-                },
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                timeout: 8000 // 8 segundos máximo
+                auth: { username: 'default', password: D_ID_API_KEY },
+                headers: { 'Content-Type': 'application/json' },
+                timeout: 8000
             }
         );
 
@@ -41,6 +41,11 @@ app.post('/generate-video', async (req, res) => {
             details: error.response?.data || null
         });
     }
+});
+
+// Ruta raíz
+app.get('/', (req, res) => {
+    res.send('API del Agente de IA. Usa POST /generate-video');
 });
 
 // Inicia el servidor
