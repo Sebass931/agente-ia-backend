@@ -25,4 +25,7 @@ app.post('/generate-video', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+app.get("/", (req, res) => {
+    res.send("¡Backend del agente de IA funcionando! Usa POST /generate-video");
+  });
 app.listen(PORT, () => console.log(`Servidor listo en puerto ${PORT}`));
