@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 
 // Configuración (¡CAMBIAR ESTO!)
-const D_ID_API_KEY = 'c2ViYXN0aWFuLnNhbmNoZXpAc29jaWFicG8uY29t:YgNp9U1j54ddOW6MYUu6-';
+const D_ID_API_KEY = 'c2ViYXN0aWFuLnNhbmNoZXpAc29jaWFicG8uY29t:KEt3gZWtHeZjz1OOFJvox';
 const AVATAR_IMAGE_URL = 'https://asset.cloudinary.com/dynpjg6wh/96beae9cf5aa257560223bcb98893b0a'; 
 
 app.use(cors());
